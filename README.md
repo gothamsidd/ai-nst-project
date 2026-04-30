@@ -116,6 +116,7 @@ This repo now includes `render.yaml` and `Procfile`, so Render can deploy it dir
 ### Required environment variable
 
 - `SECRET_KEY` (Render auto-generates this via `render.yaml`)
+- `PYTHON_VERSION=3.11.9` is already set in `render.yaml` to avoid slow/incompatible builds on newer Python versions.
 
 ### Important for model weights
 
