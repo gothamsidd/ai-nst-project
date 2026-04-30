@@ -101,3 +101,26 @@ ai-nst-project/
 
 - The upload folder is created automatically at runtime.
 - GPU is used if available; otherwise CPU mode is used automatically.
+
+## Deploy on Render (one-click)
+
+This repo now includes `render.yaml` and `Procfile`, so Render can deploy it directly.
+
+1. Push your latest code to GitHub.
+2. In Render, choose **New +** -> **Blueprint**.
+3. Select this repository and deploy.
+4. Render will auto-run:
+   - Build: `pip install -r requirements.txt`
+   - Start: `gunicorn --chdir NST_Code app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120`
+
+### Required environment variable
+
+- `SECRET_KEY` (Render auto-generates this via `render.yaml`)
+
+### Important for model weights
+
+The app needs these files at runtime:
+- `NST_Code/vgg_normalised.pth`
+- `NST_Code/experiment/final_exp/decoder_final.pth`
+
+If you move large model files out of Git later, load them during startup from cloud storage or a model registry.

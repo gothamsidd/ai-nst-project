@@ -6,3 +6,5 @@
 __pycache__/
 **/__pycache__/
 *.pyc
+NST_Code/static/uploads/*
+!NST_Code/static/uploads/.gitkeep
