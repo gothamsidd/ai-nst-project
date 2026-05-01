@@ -1,35 +1,33 @@
 # AI Neural Style Transfer (AdaIN)
 
-A Flask + PyTorch project that applies artistic style transfer to an image using the AdaIN (Adaptive Instance Normalization) approach.
+This project lets you blend the content of one image with the artistic style of another using AdaIN (Adaptive Instance Normalization).
 
-Upload:
-- a **content image** (what you want to transform),
-- a **style image** (the look you want),
-- and control blend strength with an **alpha slider**.
+Built with Flask and PyTorch, it gives you a simple web interface where you:
+- upload a content image,
+- upload a style image,
+- adjust style strength (`alpha`),
+- and generate a stylized output image.
 
-The app then generates a stylized output you can preview and download.
+## What is inside this repo
 
-## What this project includes
-
-- A web app for style transfer at `NST_Code/app.py`
-- AdaIN model components in `NST_Code/utils/`
-- Training script at `NST_Code/train.py`
-- Demo inputs in `Demo_IO_Images/`
-- Static upload/result handling in `NST_Code/static/uploads/`
+- `NST_Code/app.py` - Flask app for style transfer
+- `NST_Code/utils/` - model and utility code
+- `NST_Code/train.py` - training script
+- `NST_Code/static/uploads/` - uploaded and generated images
+- `Demo_IO_Images/` - sample images for testing
 
 ## Tech stack
 
 - Python
+- Flask
 - PyTorch + TorchVision
-- Flask + Flask-WTF + Flask-Bootstrap
-- Pillow / NumPy
+- Pillow + NumPy
 
-## Quick start (local)
+## Local setup (step by step)
 
-### 1) Clone and enter project
+### 1) Open terminal in project folder
 
 ```bash
-git clone <your-repo-url>
 cd ai-nst-project
 ```
 
@@ -52,76 +50,45 @@ pip install -r requirements.txt
 python NST_Code/app.py
 ```
 
-Open: `http://localhost:5001`
+### 5) Open in browser
 
-## How to use
+`http://127.0.0.1:5001`
 
-1. Upload a content image (jpg/png/jpeg).
-2. Upload a style image.
-3. Adjust **Style Strength (alpha)**:
-   - `0.0` -> closer to original content
-   - `1.0` -> stronger style transfer
-4. Click **Transfer Style** and download the result.
+## How to use the app
 
-## Important model files
+1. Upload a **content image** (the structure you want to keep).
+2. Upload a **style image** (the visual look you want).
+3. Adjust **alpha**:
+   - `0.0` = closer to original content
+   - `1.0` = stronger style effect
+4. Click **Transfer Style**.
+5. View/download the generated image.
 
-The web app expects these model weights to exist:
+## Required model files
+
+The app expects these files:
 
 - `NST_Code/vgg_normalised.pth`
 - `NST_Code/experiment/final_exp/decoder_final.pth`
 
-If these files are missing, inference will fail at startup.
+If they are missing, the app cannot run inference.
 
-## Training (optional)
+## Optional: training
 
-You can train a decoder using:
+To explore training options:
 
 ```bash
 python NST_Code/train.py --help
 ```
 
-The script supports dataset paths, batch size, epochs, checkpoints, and resume options.
+## Deploy on Render
 
-## Project structure
+This project includes `render.yaml` and `Procfile`, so deployment is straightforward:
 
-```text
-ai-nst-project/
-├── Demo_IO_Images/
-├── NST_Code/
-│   ├── app.py
-│   ├── train.py
-│   ├── templates/
-│   ├── static/
-│   └── utils/
-├── requirements.txt
-└── README.md
-```
-
-## Notes
-
-- The upload folder is created automatically at runtime.
-- GPU is used if available; otherwise CPU mode is used automatically.
-
-## Deploy on Render (one-click)
-
-This repo now includes `render.yaml` and `Procfile`, so Render can deploy it directly.
-
-1. Push your latest code to GitHub.
+1. Push code to GitHub.
 2. In Render, choose **New +** -> **Blueprint**.
-3. Select this repository and deploy.
-4. Render will auto-run:
-   - Build: `pip install -r requirements.txt`
-   - Start: `gunicorn --chdir NST_Code app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120`
+3. Select your repo and deploy.
 
-### Required environment variable
-
-- `SECRET_KEY` (Render auto-generates this via `render.yaml`)
-- `PYTHON_VERSION=3.11.9` is already set in `render.yaml` to avoid slow/incompatible builds on newer Python versions.
-
-### Important for model weights
-
-The app needs these files at runtime:
-- `NST_Code/vgg_normalised.pth`
-- `NST_Code/experiment/final_exp/decoder_final.pth`
-
-If you move large model files out of Git later, load them during startup from cloud storage or a model registry.
+Render uses:
+- Build: `pip install -r requirements.txt`
+- Start: `gunicorn --chdir NST_Code app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120`
